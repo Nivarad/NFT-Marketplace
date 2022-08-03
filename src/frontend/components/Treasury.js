@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import { Row, Col, Card, Button } from "react-bootstrap";
+import { Row, Col, Card } from "react-bootstrap";
 
-const Home = (props) => {
+export default function Treasury(props) {
   const [loading, setLoading] = useState(true);
-  const [items, setItems] = useState([]);
-  const loadMarketplaceItems = async () => {
-    // Load all unsold items
+  const [owned, setOwned] = useState([]);
+  console.log(props.account);
+  const loadOwnedItems = async () => {
+    // Load all items that you own and are not for sale
     const itemCount = await props.marketplace.itemCount();
     let items = [];
     for (let i = 1; i <= itemCount; i++) {
       const item = await props.marketplace.items(i);
-      if (item.forSale) {
+      if (!item.forSale &&  == props.account) {
         // get uri url from nft contract
         const uri = await props.nft.tokenURI(item.tokenId);
         // use uri to fetch the nft metadata stored on ipfs
@@ -31,28 +32,10 @@ const Home = (props) => {
       }
     }
     setLoading(false);
-    setItems(items);
+    setOwned(items);
   };
-  let buys = [];
-
-  const buyMarketItem = async (item) => {
-    const seller = await props.marketplace.getNFTSeller(item.itemId);
-    console.log(seller);
-
-    await (
-      await props.marketplace.purchaseItem(item.itemId, {
-        value: item.totalPrice,
-      })
-    ).wait();
-    //buys.push(seller, buyer);
-    //buys.push(seller, null);
-    const buyer = props.account;
-    loadMarketplaceItems();
-    props.onBuyingEvent(seller, buyer);
-  };
-
   useEffect(() => {
-    loadMarketplaceItems();
+    loadOwnedItems();
   }, []);
   if (loading)
     return (
@@ -62,27 +45,15 @@ const Home = (props) => {
     );
   return (
     <div className="flex justify-center">
-      {items.length > 0 ? (
+      {owned.length > 0 ? (
         <div className="px-5 container">
           <Row xs={1} md={2} lg={4} className="g-4 py-5">
-            {items.map((item, idx) => (
+            {owned.map((item, idx) => (
               <Col key={idx} className="overflow-hidden">
                 <Card>
                   <Card.Img variant="top" src={item.image} />
-                  <Card.Body color="secondary">
-                    <Card.Title>{item.name}</Card.Title>
-                    <Card.Text>{item.description}</Card.Text>
-                  </Card.Body>
                   <Card.Footer>
-                    <div className="d-grid">
-                      <Button
-                        onClick={() => buyMarketItem(item)}
-                        variant="primary"
-                        size="lg"
-                      >
-                        Buy for {ethers.utils.formatEther(item.totalPrice)} ETH
-                      </Button>
-                    </div>
+                    {ethers.utils.formatEther(item.totalPrice)} ETH
                   </Card.Footer>
                 </Card>
               </Col>
@@ -91,10 +62,9 @@ const Home = (props) => {
         </div>
       ) : (
         <main style={{ padding: "1rem 0" }}>
-          <h2>No listed assets</h2>
+          <h2>There is no treasure here!</h2>
         </main>
       )}
     </div>
   );
-};
-export default Home;
+}
