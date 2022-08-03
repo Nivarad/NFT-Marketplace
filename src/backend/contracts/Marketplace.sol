@@ -101,10 +101,17 @@ contract Marketplace is ReentrancyGuard {
         );
         return(msg.sender);
     }
+
     function getTotalPrice(uint _itemId) view public returns(uint){
         return((items[_itemId].price*(100 + feePercent))/100);
     }
+
     function  getNFTSeller(uint _itemId) view public returns(address){
         return ((items[_itemId].seller));
+    }
+
+    function setPrice(uint _itemId,uint _price) public{
+        Item storage item = items[_itemId];
+        item.price=_price;
     }
 }
