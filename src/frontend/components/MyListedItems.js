@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, } from 'react'
 import { ethers } from "ethers"
-import { Row, Col, Card } from 'react-bootstrap'
+import { Row, Col, Card, Button, Form} from 'react-bootstrap'
+
 
 function renderSoldItems(items) {
   return (
@@ -26,6 +27,7 @@ export default function MyListedItems({ marketplace, nft, account }) {
   const [loading, setLoading] = useState(true)
   const [listedItems, setListedItems] = useState([])
   const [soldItems, setSoldItems] = useState([])
+  const [price, setPrice] = useState(null)
   const loadListedItems = async () => {
     // Load all sold items that the user listed
     const itemCount = await marketplace.itemCount()
@@ -67,6 +69,9 @@ export default function MyListedItems({ marketplace, nft, account }) {
       <h2>Loading...</h2>
     </main>
   )
+  const repriceNFT = async () => {
+    
+  }
   return (
     <div className="flex justify-center">
       {listedItems.length > 0 ?
@@ -78,6 +83,9 @@ export default function MyListedItems({ marketplace, nft, account }) {
                 <Card>
                   <Card.Img variant="top" src={item.image} />
                   <Card.Footer>{ethers.utils.formatEther(item.totalPrice)} ETH</Card.Footer>
+                  <Form.Control type="New Price" placeholder="New price in NGNG" style={{textAlign: 'center'}}/>
+                  <Button onClick={repriceNFT} variant="primary" size="lg" style={{marginBottom: 3}}>Reprice</Button>
+                  <Button variant="dark" size="lg">Remove</Button>
                 </Card>
               </Col>
             ))}
