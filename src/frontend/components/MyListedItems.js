@@ -69,8 +69,15 @@ export default function MyListedItems({ marketplace, nft, account }) {
       <h2>Loading...</h2>
     </main>
   )
-  const repriceNFT = async () => {
-    
+  const repriceNFT = async (item) => {
+    if(price)
+      if(price>0){
+        console.log(marketplace.getTotalPrice(item.itemId))
+        await(await(marketplace.setPrice(item.itemId,ethers.utils.parseEther(price.toString())))).wait()
+      }
+  }
+  const cancelOffer = async (item) => {
+    await(await(marketplace.setForSale(item.itemId,false))).wait()
   }
   return (
     <div className="flex justify-center">
@@ -83,9 +90,9 @@ export default function MyListedItems({ marketplace, nft, account }) {
                 <Card>
                   <Card.Img variant="top" src={item.image} />
                   <Card.Footer>{ethers.utils.formatEther(item.totalPrice)} ETH</Card.Footer>
-                  <Form.Control type="New Price" placeholder="New price in NGNG" style={{textAlign: 'center'}}/>
-                  <Button onClick={repriceNFT} variant="primary" size="lg" style={{marginBottom: 3}}>Reprice</Button>
-                  <Button variant="dark" size="lg">Remove</Button>
+                  <Form.Control onChange={(e) => setPrice(e.target.value)} size="lg" required type="number" placeholder="Price in ETH" />
+                  <Button onClick={()=>repriceNFT(item)} variant="primary" size="lg" style={{marginBottom: 3}}>Reprice</Button>
+                  <Button onClick={()=>cancelOffer(item)} variant="dark" size="lg">Remove</Button>
                 </Card>
               </Col>
             ))}
