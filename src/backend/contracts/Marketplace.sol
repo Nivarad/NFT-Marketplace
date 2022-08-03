@@ -107,7 +107,8 @@ contract Marketplace is ReentrancyGuard {
     function  getNFTSeller(uint _itemId) view public returns(address){
         return ((items[_itemId].seller));
     }
-    function changeNFTHolder (uint _itemId ,address payable newHolder) public {
-        items[_itemId].seller= newHolder;
+    function changeNFTHolder (uint _itemId ,address payable _seller) public {
+        Item storage item = items[_itemId];
+        item.seller= payable(_seller);
     }
 }

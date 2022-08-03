@@ -47,6 +47,7 @@ const Home = (props) => {
     //buys.push(seller, buyer);
     //buys.push(seller, null);
     const buyer = props.account;
+
     loadMarketplaceItems();
     props.onBuyingEvent(seller, buyer);
   };

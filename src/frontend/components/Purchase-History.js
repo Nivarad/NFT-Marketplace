@@ -66,6 +66,7 @@ export default function MyPurchases(props) {
                   <Card.Footer>
                     {ethers.utils.formatEther(item.totalPrice)} ETH
                     <div>Sold by {props.seller} </div>
+                    <div>Bought by {props.buyer} </div>
                   </Card.Footer>
                 </Card>
               </Col>
