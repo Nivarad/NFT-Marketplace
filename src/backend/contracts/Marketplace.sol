@@ -114,4 +114,9 @@ contract Marketplace is ReentrancyGuard {
         Item storage item = items[_itemId];
         item.price=_price;
     }
+
+    function setForSale(uint _itemId,bool _forSale) public{
+        Item storage item = items[_itemId];
+        item.forSale=_forSale;
+    }
 }
