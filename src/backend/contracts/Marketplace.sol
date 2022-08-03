@@ -122,10 +122,6 @@ contract Marketplace is ReentrancyGuard {
 
     function setForSale(uint _itemId,bool _forSale) public{
         Item storage item = items[_itemId];
-<<<<<<< HEAD
         item.forSale=_forSale;
-=======
-        item.forSale = _forSale;
->>>>>>> fd43ce8d33be94ee54387029177d07c84a27f8f0
     }
 }
