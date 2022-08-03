@@ -38,6 +38,7 @@ const Home = (props) => {
   const buyMarketItem = async (item) => {
     const seller = await props.marketplace.getNFTSeller(item.itemId);
     console.log(seller);
+
     await (
       await props.marketplace.purchaseItem(item.itemId, {
         value: item.totalPrice,
@@ -45,9 +46,10 @@ const Home = (props) => {
     ).wait();
     //buys.push(seller, buyer);
     //buys.push(seller, null);
+    const buyer = props.account;
 
     loadMarketplaceItems();
-    props.onBuyingEvent(seller);
+    props.onBuyingEvent(seller, buyer);
   };
 
   useEffect(() => {

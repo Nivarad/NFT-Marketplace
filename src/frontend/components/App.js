@@ -4,6 +4,7 @@ import Home from "./Home.js";
 import Create from "./Create.js";
 import MyListedItems from "./MyListedItems.js";
 import PurchaseHistory from "./Purchase-History.js";
+import Treasury from "./Treasury.js";
 import MarketplaceAbi from "../contractsData/Marketplace.json";
 import MarketplaceAddress from "../contractsData/Marketplace-address.json";
 import NFTAbi from "../contractsData/NFT.json";
@@ -57,10 +58,11 @@ function App() {
     setLoading(false);
   };
 
-  const NFTBought = (seller) => {
+  const NFTBought = (seller, buyer) => {
     //console.log(tuple.seller);
     //console.log(tuple.buyer);
     setSeller(seller);
+    setBuyer(buyer);
     //setBuyer(tuple.buyer);
   };
   return (
@@ -90,6 +92,7 @@ function App() {
                   <Home
                     marketplace={marketplace}
                     nft={nft}
+                    account={account}
                     onBuyingEvent={NFTBought}
                   />
                 }
@@ -97,6 +100,16 @@ function App() {
               <Route
                 path="/create"
                 element={<Create marketplace={marketplace} nft={nft} />}
+              />
+              <Route
+                path="/Treasury"
+                element={
+                  <Treasury
+                    marketplace={marketplace}
+                    nft={nft}
+                    account={account}
+                  />
+                }
               />
               <Route
                 path="/my-listed-items"
@@ -115,6 +128,7 @@ function App() {
                     marketplace={marketplace}
                     nft={nft}
                     seller={seller}
+                    buyer={buyer}
                   />
                 }
               />
