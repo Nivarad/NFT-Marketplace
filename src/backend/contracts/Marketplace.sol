@@ -20,6 +20,7 @@ contract Marketplace is ReentrancyGuard {
         uint tokenId;
         uint price;
         address payable seller;
+        address payable owner;
         bool forSale;
     }
     
@@ -64,6 +65,7 @@ contract Marketplace is ReentrancyGuard {
             _tokenId,
             _price,
             payable(msg.sender),
+            payable(address(0)),
             true
         );
         // emit Offered event
@@ -99,6 +101,7 @@ contract Marketplace is ReentrancyGuard {
             msg.sender
             
         );
+        item.owner=payable(msg.sender);
         return(msg.sender);
     }
     

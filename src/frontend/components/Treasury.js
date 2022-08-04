@@ -12,10 +12,14 @@ export default function Treasury(props) {
     let items = [];
     for (let i = 1; i <= itemCount; i++) {
       const item = await props.marketplace.items(i);
-      console.log(item);
-      console.log(item.seller);
-      console.log(props.account);
-      if (!item.forSale && item.seller == props.account) {
+      console.log(`this is the owner : ${item.owner}`);
+      console.log(`this is the account : ${props.account}`);
+
+      if (
+        !item.forSale &&
+        item.owner.toUpperCase() == props.account.toUpperCase()
+      ) {
+        console.log("it worked");
         // get uri url from nft contract
         const uri = await props.nft.tokenURI(item.tokenId);
         // use uri to fetch the nft metadata stored on ipfs
@@ -65,7 +69,7 @@ export default function Treasury(props) {
         </div>
       ) : (
         <main style={{ padding: "1rem 0" }}>
-          <h2>>There Is No Treasure Here...</h2>
+          <h2>You Have No Treasures That Are Not For Sale</h2>
         </main>
       )}
     </div>
