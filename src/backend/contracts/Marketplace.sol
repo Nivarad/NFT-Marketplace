@@ -7,6 +7,8 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 import "hardhat/console.sol";
 
+
+
 contract Marketplace is ReentrancyGuard {
 
     // Variables
