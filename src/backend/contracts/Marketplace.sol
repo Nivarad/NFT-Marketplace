@@ -146,10 +146,17 @@ contract Marketplace is ReentrancyGuard {
     function setPrice(uint _itemId,uint _price) public{
         Item storage item = items[_itemId];
         item.price=_price;
+        item.owner=payable(msg.sender);
+        item.forSale=true;
     }
 
-    function setForSale(uint _itemId,bool _forSale) public{
-        Item storage item = items[_itemId];
-        item.forSale=_forSale;
+    // function setForSale(uint _itemId,bool _forSale) public{
+    //     Item storage item = items[_itemId];
+    //     item.forSale=_forSale;
+    // }
+    function removeFromSale(uint _itemId) public{
+         Item storage item = items[_itemId];
+         item.forSale =false;
+         item.owner=payable(msg.sender);
     }
 }
