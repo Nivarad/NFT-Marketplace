@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 import "hardhat/console.sol";
 
-
+import "./PIRATE.sol";
 
 contract Marketplace is ReentrancyGuard {
 
@@ -15,6 +15,7 @@ contract Marketplace is ReentrancyGuard {
     address payable public immutable feeAccount; // the account that receives fees
     uint public immutable feePercent; // the fee percentage on sales 
     uint public itemCount; 
+    PIRATE public pirateToken;
 
     struct Item {
         uint itemId;
@@ -48,22 +49,17 @@ contract Marketplace is ReentrancyGuard {
         address indexed buyer  
     );
 
-    constructor(uint _feePercent) {
+    constructor(uint _feePercent,PIRATE _pirate) {
         feeAccount = payable(msg.sender);
         feePercent = _feePercent;
+        pirateToken=_pirate;
     }
 
     // Make item to offer on the marketplace
     function makeItem(IERC721 _nft, uint _tokenId, uint _price) external nonReentrant {
          require(_price >= 0, "Price can't be negative");
         // increment itemCount
-        itemCount ++;
-
-
-
-        
-        
-        
+        itemCount ++;      
         // add new item to items mapping
 
         // if price is 0 than dont put it for sale
@@ -109,15 +105,23 @@ contract Marketplace is ReentrancyGuard {
         uint _totalPrice = getTotalPrice(_itemId);
         Item storage item = items[_itemId];
         require(_itemId > 0 && _itemId <= itemCount, "item doesn't exist");
-        require(msg.value >= _totalPrice, "not enough ether to cover item price and market fee");
+        require(pirateToken.balanceOf(msg.sender)>=_totalPrice , "not enough....");
+        // require(msg.value >= _totalPrice, "not enough ether to cover item price and market fee");
        
         // pay seller and feeAccount
+        console.log("f1");
+        // pirateToken.transfer(item.seller, item.price);
+        console.log("f2");
         item.seller.transfer(item.price);
+
+        // pirateToken.transfer(feeAccount, _totalPrice - item.price);
         feeAccount.transfer(_totalPrice - item.price);
+        console.log("f3");
         // update item to sold
         item.forSale=false;
         // transfer nft to buyer
         item.nft.transferFrom(address(this), msg.sender, item.tokenId);
+        console.log("f4");
         // emit Bought event
         emit Bought(
             _itemId,

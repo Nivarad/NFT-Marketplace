@@ -1,4 +1,5 @@
 const { ethers } = require("hardhat");
+const fs = require("fs");
 async function main() {
   // const addresses = [
   //   "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
@@ -10,6 +11,9 @@ async function main() {
   //   "0x976ea74026e726554db657fa54763abd0c3a0aa9",
   // ];
 
+  // delete file named 'sample.txt'
+  fs.unlink("../cache/solidity-files-cache.json", function (err) {});
+
   console.log(await ethers.getSigners());
   const [owner, address1, addr2, addr3] = await ethers.getSigners();
 
@@ -18,7 +22,9 @@ async function main() {
 
   const PIRATE = await ethers.getContractFactory("PIRATE");
   const pirate = await PIRATE.deploy();
+  await pirate.deployed();
 
+  await pirate.connect(owner).mint();
   await pirate.connect(address1).mint();
   await pirate.connect(addr2).mint();
   await pirate.connect(addr3).mint();
@@ -30,7 +36,7 @@ async function main() {
   const NFT = await ethers.getContractFactory("NFT");
   const Marketplace = await ethers.getContractFactory("Marketplace");
   // deploy contracts
-  const marketplace = await Marketplace.deploy(1);
+  const marketplace = await Marketplace.deploy(1, pirate.address);
   const nft = await NFT.deploy();
   // Save copies of each contracts abi and address to the frontend.
   saveFrontendFiles(pirate, "PIRATE");
@@ -39,7 +45,6 @@ async function main() {
 }
 
 function saveFrontendFiles(contract, name) {
-  const fs = require("fs");
   const contractsDir = __dirname + "/../../frontend/contractsData";
 
   if (!fs.existsSync(contractsDir)) {

@@ -38,12 +38,14 @@ const Home = (props) => {
   const buyMarketItem = async (item) => {
     const seller = await props.marketplace.getNFTSeller(item.itemId);
     console.log(seller);
-
+    console.log("it came up to here");
     await (
       await props.marketplace.purchaseItem(item.itemId, {
         value: item.totalPrice,
       })
     ).wait();
+
+    console.log("it came up to here!!!");
     //buys.push(seller, buyer);
     //buys.push(seller, null);
     const buyer = props.account;
