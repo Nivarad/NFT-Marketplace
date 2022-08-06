@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import { Row, Col, Card } from "react-bootstrap";
+import { Row, Form, Button, Col, Card } from "react-bootstrap";
 
 export default function Treasury(props) {
   const [loading, setLoading] = useState(true);
   const [owned, setOwned] = useState([]);
+  const [price, setPrice] = useState(null);
   console.log(props.account);
   const loadOwnedItems = async () => {
     // Load all items that you own and are not for sale
@@ -44,6 +45,18 @@ export default function Treasury(props) {
   useEffect(() => {
     loadOwnedItems();
   }, []);
+  const repriceNFT = async (item) => {
+    if (price)
+      if (price > 0) {
+        console.log(props.marketplace.getTotalPrice(item.itemId));
+        await (
+          await props.marketplace.setPrice(
+            item.itemId,
+            ethers.utils.parseEther(price.toString())
+          )
+        ).wait();
+      }
+  };
   if (loading)
     return (
       <main style={{ padding: "1rem 0" }}>
@@ -59,9 +72,21 @@ export default function Treasury(props) {
               <Col key={idx} className="overflow-hidden">
                 <Card>
                   <Card.Img variant="top" src={item.image} />
-                  <Card.Footer>
-                    {ethers.utils.formatEther(item.totalPrice)} ETH
-                  </Card.Footer>
+                  <Form.Control
+                    onChange={(e) => setPrice(e.target.value)}
+                    size="lg"
+                    required
+                    type="number"
+                    placeholder="Price in ETH"
+                  />
+                  <Button
+                    onClick={() => repriceNFT(item)}
+                    variant="primary"
+                    size="lg"
+                    style={{ marginBottom: 3 }}
+                  >
+                    Reprice
+                  </Button>
                 </Card>
               </Col>
             ))}
