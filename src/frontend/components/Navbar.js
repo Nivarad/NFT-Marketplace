@@ -4,10 +4,10 @@ import pirateBay from "./pirate-bay.png";
 
 const Navigation = ({ web3Handler, account }) => {
   return (
-    <Navbar expand="lg" bg="secondary" variant="dark">
+    <Navbar expand="lg" bg="dark" variant="dark">
       <Container>
         <Navbar.Brand href="#">
-          <img src={pirateBay} width="80" height="80" className="" alt="" />
+          <img src={pirateBay} width="100" height="100" className="" alt=""/>
           &nbsp; Pirate NFT Market
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />

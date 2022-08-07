@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "./Navbar";
+import Footer from "./Footer";
 import Home from "./Home.js";
 import Create from "./Create.js";
 import MyListedItems from "./MyListedItems.js";
@@ -135,6 +136,9 @@ function App() {
             </Routes>
           )}
         </div>
+        <>
+          <Footer/>
+        </>
       </div>
     </BrowserRouter>
   );

@@ -19,8 +19,10 @@
     npm install @openzeppelin/contracts
     npm install react-router-dom@6
     npm install ipfs-http-client@56.0.1
+    npm install web3
 
 ## Launch Frontend
+    npm cache clean –force
     npm run start
 
 ## start hardhat - on diff node
