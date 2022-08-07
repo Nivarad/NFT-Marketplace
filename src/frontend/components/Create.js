@@ -99,7 +99,7 @@ const Create = ({ marketplace, nft }) => {
                 onChange={(e) => setPrice(e.target.value)}
                 size="lg"
                 type="number"
-                placeholder="Price in Eth"
+                placeholder="Price in PIRATE"
               />
               <div className="d-grid px-0">
                 <Button onClick={createNFT} variant="primary" size="lg">

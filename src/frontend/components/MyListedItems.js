@@ -102,7 +102,7 @@ export default function MyListedItems({ marketplace, nft, account }) {
                     size="lg"
                     required
                     type="number"
-                    placeholder="Price in ETH"
+                    placeholder="Price in PIRATE"
                   />
                   <Button
                     onClick={() => repriceNFT(item)}
