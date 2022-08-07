@@ -16,6 +16,7 @@ contract Marketplace is ReentrancyGuard {
     uint public immutable feePercent; // the fee percentage on sales 
     uint public itemCount; 
     PIRATE public pirateToken;
+    address payable public immutable mainAccount= payable(0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266) ;
 
     struct Item {
         uint itemId;
@@ -53,6 +54,9 @@ contract Marketplace is ReentrancyGuard {
         feeAccount = payable(msg.sender);
         feePercent = _feePercent;
         pirateToken=_pirate;
+        pirateToken.mint();
+        console.log("amount of tokens : ",pirateToken.balanceOf(address(this)));
+        
     }
 
     // Make item to offer on the marketplace
@@ -109,20 +113,35 @@ contract Marketplace is ReentrancyGuard {
         // require(msg.value >= _totalPrice, "not enough ether to cover item price and market fee");
        
         // pay seller and feeAccount
-        console.log("f1");
-        // pirateToken.transfer(item.seller, item.price);
+        console.log("pirateToken balance buyer : " ,pirateToken.balanceOf(msg.sender));
+        console.log("pirateToken balance of this contract : " ,pirateToken.balanceOf(address(this)));
+        console.log("this is the contract address : ",address(this));
+        console.log("want to pay :",item.price);
+        
+        
+        pirateToken.transfer(item.seller, item.price);
         console.log("f2");
-        item.seller.transfer(item.price);
-
-        // pirateToken.transfer(feeAccount, _totalPrice - item.price);
-        feeAccount.transfer(_totalPrice - item.price);
+        pirateToken.transfer(feeAccount, _totalPrice - item.price);
+        
         console.log("f3");
-        // update item to sold
+        
+        
+        
+        
+        // pirateToken.transfer(feeAccount, _totalPrice - item.price);
+        // //feeAccount.transfer(_totalPrice - item.price);
+        // console.log("f3");
+        // // update item to sold
         item.forSale=false;
-        // transfer nft to buyer
+        // // transfer nft to buyer
         item.nft.transferFrom(address(this), msg.sender, item.tokenId);
         console.log("f4");
-        // emit Bought event
+
+         console.log("pirateToken balance buyer : " ,pirateToken.balanceOf(msg.sender));
+        console.log("pirateToken balance of this contract : " ,pirateToken.balanceOf(address(this)));
+        console.log("this is the contract address : ",address(this));
+        console.log("want to pay :",item.price);
+        // // emit Bought event
         emit Bought(
             _itemId,
             address(item.nft),

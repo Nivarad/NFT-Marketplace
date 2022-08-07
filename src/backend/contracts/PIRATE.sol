@@ -6,14 +6,20 @@ import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 
 contract PIRATE is ERC20 {
     
+    mapping(address => mapping (address => uint256)) allowed;
     constructor() ERC20('TheBitPirate', 'PIRATE') {
         
 
         _mint(address(this), 100000 * 10**decimals());
+        //  address payable addr=payable(0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0);
+
+        // transfer(addr, 100000 * 10**decimals());
     }
 
     function mint() public returns (bool){
         _mint(msg.sender,100000 * 10**decimals());
+       
+        
         return true;
     }
     
@@ -25,6 +31,15 @@ contract PIRATE is ERC20 {
         uint amount=msg.value;
         return amount;
     }
+    function approve(address delegate, uint256 numTokens) public override returns (bool) {
+        allowed[msg.sender][delegate] = numTokens;
+        emit Approval(msg.sender, delegate, numTokens);
+        return true;
+    }
+    function allowance(address owner, address delegate) public override view returns (uint) {
+        return allowed[owner][delegate];
+    }
+    
     
    
 

@@ -9,6 +9,8 @@ import MarketplaceAbi from "../contractsData/Marketplace.json";
 import MarketplaceAddress from "../contractsData/Marketplace-address.json";
 import NFTAbi from "../contractsData/NFT.json";
 import NFTAddress from "../contractsData/NFT-address.json";
+import PIRATEABI from "../contractsData/PIRATE.json";
+import PIRATEAddress from "../contractsData/PIRATE-address.json";
 import { useState } from "react";
 import { ethers } from "ethers";
 import { Spinner } from "react-bootstrap";
@@ -23,6 +25,7 @@ function App() {
   const [marketplace, setMarketplace] = useState({});
   const [seller, setSeller] = useState({});
   const [buyer, setBuyer] = useState({});
+  const [pirate, setPirate] = useState({});
   // MetaMask Login/Connect
 
   const web3Handler = async () => {
@@ -52,7 +55,14 @@ function App() {
       MarketplaceAbi.abi,
       signer
     );
+
     setMarketplace(marketplace);
+    const pirate = new ethers.Contract(
+      PIRATEAddress.address,
+      PIRATEABI.abi,
+      signer
+    );
+    setPirate(pirate);
     const nft = new ethers.Contract(NFTAddress.address, NFTAbi.abi, signer);
     setNFT(nft);
     setLoading(false);
@@ -94,6 +104,7 @@ function App() {
                     nft={nft}
                     account={account}
                     onBuyingEvent={NFTBought}
+                    pirate={pirate}
                   />
                 }
               />
